@@ -13,7 +13,6 @@ export default function(SpecificComponent, option, adminRoute = null){
     function AuthCheck(props){
 
         let user = useSelector(state => state.user);
-
         const dispatch = useDispatch();
         const navigate  = useNavigate();
 
