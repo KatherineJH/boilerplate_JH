@@ -43,7 +43,7 @@ function Comments(props) {
             <p style={{margin:'auto'}}> Share your opinions about {props.movieTitle} </p>
             <hr />
             {/* Comment Lists  */}
-            {console.log(props.CommentLists)}
+            {/* {console.log(props.CommentLists)} */}
 
             {props.CommentLists && props.CommentLists.map((comment, index) => (
                 (!comment.responseTo &&
@@ -65,7 +65,7 @@ function Comments(props) {
             <div style={{ display: 'flex'}} >
                 <form onSubmit={onSubmit} style={{ width:'100%' }}>
                     <textarea
-                        style={{ height:'100px', borderRadius: '5px' }}
+                        style={{ height:'100px', borderRadius: '5px', fontSize:'18px' }}
                         onChange={handleChange}
                         value={Comment}
                         placeholder="write some comments"

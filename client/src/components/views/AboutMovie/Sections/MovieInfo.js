@@ -8,6 +8,7 @@ function MovieInfo(props) {
     <div>
       <p>Movie Info</p>
       <table style={{ fontSize:'18px'}}>
+        <tbody>
           <tr>
             <td>Title</td>
             <td>{movie.original_title}</td>
@@ -40,6 +41,7 @@ function MovieInfo(props) {
             <td>Popularity</td>
             <td>{movie.popularity}</td>
           </tr>
+        </tbody>
       </table>
     </div>
   )

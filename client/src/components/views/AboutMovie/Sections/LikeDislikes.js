@@ -20,7 +20,7 @@ function LikeDislikes(props) {
     useEffect(() => {
         Axios.post('/api/like/getLikes', variable)
             .then(response => {
-                console.log('getLikes',response.data)
+                // console.log('getLikes',response.data)
                 if (response.data.success) {
                     //How many likes does this video or comment have 
                     setLikes(response.data.likes.length)
@@ -38,7 +38,7 @@ function LikeDislikes(props) {
 
         Axios.post('/api/like/getDislikes', variable)
             .then(response => {
-                console.log('getDislike',response.data)
+                // console.log('getDislike',response.data)
                 if (response.data.success) {
                     //How many likes does this video or comment have 
                     setDislikes(response.data.dislikes.length)

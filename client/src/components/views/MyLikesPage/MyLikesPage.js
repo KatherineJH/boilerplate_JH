@@ -1,8 +1,9 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import './myLikes.css'
 import { IMAGE_URL } from '../../../Config';
 import { Popover } from 'antd';
+import axios from 'axios'
+import './myLikes.css'
+
 
 function MyLikesPage() {
 
@@ -21,12 +22,6 @@ function MyLikesPage() {
           alert('Failed to get a movie liked by you.');
           }
       })
-      .catch( error => {
-        alert('Error!');
-        setTimeout(() => {
-          alert("Error!")
-        }, 3000)
-      })  
     };
 
     useEffect(() => {
@@ -45,7 +40,7 @@ function MyLikesPage() {
               if (response.data.success) {
                   fetchFavoredMovie()
               } else {
-                  alert("리스트에서 지우는데 실패했습니다.")
+                  alert("Failed to remove from the list.")
               }
           })
     };
@@ -56,13 +51,11 @@ function MyLikesPage() {
             <a href={`/movie/${favorite.movieId}`}>
             {favorite.moviePost ? (
               <img src={`${IMAGE_URL}w500/${favorite.moviePost}`} /> 
-              //이미지 가져오는 API</a>  
             ) : (
               'no image'
             )}
             </a>
           </div>
-        
         );
   
         return (

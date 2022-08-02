@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { API_URL, API_KEY, IMAGE_URL, IMAGE_SIZE } from '../../../Config'
+import { API_URL, API_KEY, IMAGE_URL } from '../../../Config'
 import {useParams} from 'react-router-dom'
 import axios from 'axios';
 

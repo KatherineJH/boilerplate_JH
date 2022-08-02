@@ -42,14 +42,19 @@ function SingleComment(props) {
 
     const actions = [
         <LikeDislikes comment commentId={props.comment._id} userId={localStorage.getItem('userId')} />,
-        <span onClick={openReply} key="comment-basic-reply-to">Reply to </span>
+        <span style={{fontSize:'1rem'}} onClick={openReply} key="comment-basic-reply-to"> Reply to </span>
     ]
 
     return (
         <div>
             <Comment
+                style={{fontSize:'1rem'}}
                 actions={actions}
-                author={props.comment.writer.name}
+                author={
+                    <p style={{fontSize:'18px'}}>
+                        {props.comment.writer.name}
+                    </p>
+                }
                 avatar={
                     <Avatar
                         src={props.comment.writer.image}
@@ -57,26 +62,25 @@ function SingleComment(props) {
                     />
                 }
                 content={
-                    <p>
+                    <p style={{fontSize:'18px'}}>
                         {props.comment.content}
                     </p>
                 }
             ></Comment>
 
-
             {OpenReply &&
-                <form style={{ display: 'flex' }} onSubmit={onSubmit}>
-                    <textarea
-                        style={{ width: '100%', borderRadius: '5px' }}
-                        onChange={handleChange}
-                        value={CommentValue}
-                        placeholder="write some comments"
-                    />
-                    <br />
-                    <button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</button>
+                <form onSubmit={onSubmit}>
+                    <div style={{ display: 'flex' }}>
+                        <textarea
+                            style={{ width: '100%', marginTop:'10',borderRadius: '5px', fontSize:'18px' }}
+                            onChange={handleChange}
+                            value={CommentValue}
+                            placeholder='write some comments'
+                        />
+                        <button style={{ width: '20%', height: '45px'}} onClick={onSubmit}>Submit</button>   
+                    </div>
                 </form>
             }
-
         </div>
     )
 }

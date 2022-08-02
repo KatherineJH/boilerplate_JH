@@ -22,7 +22,7 @@ function ReplyComment(props) {
         props.CommentLists.map((comment, index) => (
             <React.Fragment key={index}>
                 {comment.responseTo === parentCommentId &&
-                    <div style={{ width: '80%', marginLeft: '40px' }}>
+                    <div style={{ width: '80%', marginLeft: '40px'}}>
                         <SingleComment comment={comment} postId={props.postId} refreshFunction={props.refreshFunction} />
                         <ReplyComment CommentLists={props.CommentLists} parentCommentId={comment._id} postId={props.postId} refreshFunction={props.refreshFunction} />
                     </div>
