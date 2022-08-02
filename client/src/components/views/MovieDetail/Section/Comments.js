@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { Button, Input, Typography, } from 'antd';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import SingleComment from './SingleComment';
 import ReplyComment from './ReplyComment';
-const { TextArea } = Input;
-const { Title } = Typography;
+
 function Comments(props) {
     const user = useSelector(state => state.user)
     const [Comment, setComment] = useState("")
@@ -15,7 +13,7 @@ function Comments(props) {
     }
 
     const onSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); // preventing refresh the page
 
         if (user.userData && !user.userData.isAuth) {
             return alert('Please Log in first');
@@ -42,7 +40,7 @@ function Comments(props) {
     return (
         <div>
             <br />
-            <Title level={3} > Share your opinions about {props.movieTitle} </Title>
+            <p > Share your opinions about {props.movieTitle} </p>
             <hr />
             {/* Comment Lists  */}
             {console.log(props.CommentLists)}
@@ -64,14 +62,14 @@ function Comments(props) {
 
             {/* Root Comment Form */}
             <form style={{ display: 'flex' }} onSubmit={onSubmit}>
-                <TextArea
+                <textarea
                     style={{ width: '100%', borderRadius: '5px' }}
                     onChange={handleChange}
                     value={Comment}
                     placeholder="write some comments"
                 />
                 <br />
-                <Button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</Button>
+                <button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</button>
             </form>
 
         </div>

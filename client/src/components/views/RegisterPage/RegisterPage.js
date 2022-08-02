@@ -39,8 +39,6 @@ function RegisterPage() {
           password: Password
       }
 
-      // const navigate = useNavigate();
-
       dispatch(registerUser(body))
           .then(response => {
               if(response.payload.success){
@@ -54,9 +52,7 @@ function RegisterPage() {
   };
 
   return (
-    <div className="registerBody" 
-    // style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh'}}
-      >
+    <div className="registerBody">
       <form onSubmit={onsubmitEvent}>
       {/* style={{ display:'flex', flexDirection:'column'}} */}
         <label>Email</label>

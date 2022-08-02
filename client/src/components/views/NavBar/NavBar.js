@@ -118,4 +118,3 @@ function Navbar() {
 }
 
 export default Navbar;
-// export default withRouter(Navbar);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Tooltip } from 'antd';
-import { Icon } from '@ant-design/compatible';
+// import { Icon } from '@ant-design/compatible';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
 
@@ -19,11 +19,7 @@ function LikeDislikes(props) {
         variable = { commentId: props.commentId, userId: props.userId }
     }
 
-    
-
-
     useEffect(() => {
-
         Axios.post('/api/like/getLikes', variable)
             .then(response => {
                 console.log('getLikes',response.data)
@@ -49,7 +45,6 @@ function LikeDislikes(props) {
                 if (response.data.success) {
                     //How many likes does this video or comment have 
                     setDislikes(response.data.dislikes.length)
-
                     //if I already click this like button or not 
                     response.data.dislikes.map(dislike => {
                         if (dislike.userId === props.userId) {
@@ -60,9 +55,7 @@ function LikeDislikes(props) {
                     alert('Failed to get dislikes')
                 }
             })
-
     }, [])
-
 
     const onLike = () => {
        
@@ -71,7 +64,6 @@ function LikeDislikes(props) {
         }
 
         if (LikeAction === null) {
-
             Axios.post('/api/like/upLike', variable)
                 .then(response => {
                     if (response.data.success) {
@@ -80,21 +72,15 @@ function LikeDislikes(props) {
                         setLikeAction('liked')
 
                         //If dislike button is already clicked
-
                         if (DislikeAction !== null) {
                             setDislikeAction(null)
                             setDislikes(Dislikes - 1)
                         }
-
-
                     } else {
                         alert('Failed to increase the like')
                     }
                 })
-
-
         } else {
-
             Axios.post('/api/like/unLike', variable)
                 .then(response => {
                     if (response.data.success) {
@@ -106,9 +92,7 @@ function LikeDislikes(props) {
                         alert('Failed to decrease the like')
                     }
                 })
-
         }
-
     }
 
 
@@ -119,21 +103,16 @@ function LikeDislikes(props) {
         }
 
         if (DislikeAction !== null) {
-
             Axios.post('/api/like/unDisLike', variable)
                 .then(response => {
                     if (response.data.success) {
-
                         setDislikes(Dislikes - 1)
                         setDislikeAction(null)
-
                     } else {
                         alert('Failed to decrease dislike')
                     }
                 })
-
         } else {
-
             Axios.post('/api/like/upDisLike', variable)
                 .then(response => {
                     if (response.data.success) {
@@ -146,23 +125,18 @@ function LikeDislikes(props) {
                             setLikeAction(null)
                             setLikes(Likes - 1)
                         }
-
                     } else {
                         alert('Failed to increase dislike')
                     }
                 })
-
-
         }
-
-
     }
 
     return (
         <React.Fragment>
             <span key="comment-basic-like">
                 <Tooltip title="Like">
-                    <Icon type="like"
+                    <i class="fa fa-thumbs-up"
                         theme={LikeAction === 'liked' ? 'filled' : 'outlined'}
                         onClick={onLike} />
                 </Tooltip>
@@ -170,8 +144,7 @@ function LikeDislikes(props) {
             </span>&nbsp;&nbsp;&nbsp;&nbsp;
             <span key="comment-basic-dislike">
                 <Tooltip title="Dislike">
-                    <Icon
-                        type="dislike"
+                    <i class="fa fa-thumbs-down"
                         theme={DislikeAction === 'disliked' ? 'filled' : 'outlined'}
                         onClick={onDisLike}
                     />

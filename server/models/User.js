@@ -1,14 +1,12 @@
-// MongoDB Model & Schema
-// mongoose Model은 Schema를 감싸주는 역할. DB에 interface를 제공한다.
-// mongoose Schema는 document 구조, default values, validators 등을 define 한다. 
+// MongoDB Model & Schema >> interface in DB
+// mongoose Schema defines document structures, default values, validators and so on.
 
-// 암호화 하기 위해 bcrypt 가져온다.(라이브러리에서 가져오는거라 ./ 필요 없음)
+// bcrypt for encrypt password
 const bcrypt = require('bcrypt');
-const saltRounds = 10; // salt 생성(saltRound = 10-> 10 자리 salt) -> 비밀번호를 암호화
-// json web token(라이브러리에서 가져오는거라 ./ 필요 없음)
+const saltRounds = 10; // create salt(saltRound = 10-> 10 digits salt) -> encrypt password
+
 const jwt = require('jsonwebtoken');
 
-// mongoose module을 가져온다.(라이브러리에서 가져오는거라 ./ 필요 없음)
 const mongoose = require('mongoose');
 // create Schema 
 const userSchema = mongoose.Schema({
@@ -34,22 +32,20 @@ const userSchema = mongoose.Schema({
         default: 0
     },
     image: String,
-    token:{ // 유효성 관리
+    token:{ // validation check
         type: String
     },
-    tokenExp:{ // token 유효기간
+    tokenExp:{ // token Exp
         type: Number
     }
 })
 
-// save전에 암호화 해주기 
+// encrypt before saving  
 userSchema.pre('save', function( next ){
 
     var user = this;
 
-    // 비밀번호에 변화가 있는 경우에만
     if(user.isModified('password')){
-        // 비밀번호를 암호화 시킨다.
         bcrypt.genSalt(saltRounds, function (err, salt){
             if(err) return next(err)
             bcrypt.hash(user.password, salt, function (err, hash){
@@ -60,14 +56,13 @@ userSchema.pre('save', function( next ){
                 next()
             })
         })
-    } else { // 만약에 비밀번호가 아닌 다른 것을 바꿀 때는 
-        next() // 들어 왔다가 바로 나간다. (어디로? index.js로?)
+    } else { // if change other detail, not password 
+        next(); 
     }
 })
 
-// comparePassword() 메소드 생성(index.js) -> User.js 유저 모델에서 만들어야 한다.
+// comparePassword() method to be used in index.js -> should be made in User.js(User model)
 userSchema.methods.comparePassword = function(plainPassword, cb) {
-    // plainPassword 1234567 // 암호화 된 비밀번호 $2b$10$WBYPU5z5okNFIE0lViM6NOujCFqnsglpZJB3gpX1vOVZ4baUK9Qx2
     bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
         if(err) return cb(err);  // false
             cb(null, isMatch)    // true
@@ -78,9 +73,8 @@ userSchema.methods.generToken = function(cb){
     var user = this;
     // console.log('user._id', user._id);
 
-    // jsonwebtoken을 이용해서 token을 생성하기
+    // create token using jsonwebtoken
     var token = jwt.sign(user._id.toHexString(), 'hidenToken');
-    // userSchema의 token 부분 필드에 넣어주기
     // user._id +'hidenToken' = token
     user.token = token
     user.save(function(err, user){
@@ -91,10 +85,8 @@ userSchema.methods.generToken = function(cb){
 
 userSchema.statics.findByToken = function( token, cb) {
     var user = this;
-    // token을 decode 한다.
+    // decode token
     jwt.verify( token, 'hidenToken', function(err, decoded) {
-        // 유저 아이디를 이용하여 유저를 찾은 다음
-        // client에서 가져온 token과 DB의 token이 일치하는지 확인
         user.findOne({ "_id" : decoded, "token": token }, function(err, user){
             if(err) return cb(err);
             cb(null, user)
@@ -105,7 +97,7 @@ userSchema.statics.findByToken = function( token, cb) {
 // cover schema by model
 const User = mongoose.model('User', userSchema);
 // export module to make other files use module 
-module.exports = {User}
+module.exports = {User};
 
 
 

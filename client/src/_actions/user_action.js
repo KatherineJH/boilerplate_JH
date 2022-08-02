@@ -11,27 +11,27 @@ export function loginUser(dataToSubmit){
     
     const request = axios.post('/api/users/login', dataToSubmit)
         .then(response => response.data)
-    return { // return을 해서 reducer로 보낸다.
+    return { // return -> send to reducer
         type: USER_LOGIN,
         payload: request
     }
 }
 
-export function registerUser(dataToSubmit){
+export function registerUser(dataToSubmit){ // post need parameter(body)
     
     const request = axios.post('/api/users/register', dataToSubmit)
         .then(response => response.data)
-    return { // return을 해서 reducer로 보낸다.
+    return { // return -> send to reducer
         type: USER_REGISTER,
         payload: request
     }
 }
 
-export function authenticate(){ // get은 (body) 부분이 필요 없다.
+export function authenticate(){ // get no need parameter(body)
     
     const request = axios.get('/api/users/auth')
         .then(response => response.data)
-    return { // return을 해서 reducer로 보낸다.
+    return { // return -> send to reducer
         type: USER_AUTHENTICATE,
         payload: request
     }

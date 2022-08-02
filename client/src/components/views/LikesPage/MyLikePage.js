@@ -9,11 +9,8 @@ function MyLikePage() {
     const [Favorites, setFavorites] = useState([])
 
     useEffect(() => {
-
-        fetchFavoredMovie()
-       
+        fetchFavoredMovie()   
     }, [])
-
 
     const fetchFavoredMovie = () => {
         Axios.post('/api/favorite/getFavoredMovie', { userFrom: localStorage.getItem('userId') })
@@ -21,12 +18,10 @@ function MyLikePage() {
                 if (response.data.success) {
                     setFavorites(response.data.favorites)
                 } else {
-                    alert('영화 정보를 가져오는데 실패 했습니다.')
+                    alert('Failed to get movie info.')
                 }
             })
     }
-
-
 
     const onClickDelete = (movieId, userFrom) => {
 
@@ -40,38 +35,29 @@ function MyLikePage() {
                 if (response.data.success) {
                     fetchFavoredMovie()
                 } else {
-                    alert("리스트에서 지우는데 실패했습니다.")
+                    alert("Failed to remove from the list.")
                 }
             })
-
-
     }
-
 
     const renderCards = Favorites.map((favorite, index) => {
 
         const content = (
             <div>
                 {favorite.moviePost ?
-
                     <img src={`${IMAGE_URL}w500${favorite.moviePost}`} /> : "no image"}
             </div>
         )
 
-
         return <tr key={index}>
-
             <Popover content={content} title={`${favorite.movieTitle}`} >
                 <td>{favorite.movieTitle}</td>
             </Popover>
 
             <td>{favorite.movieRunTime} mins</td>
             <td><button onClick={() => onClickDelete(favorite.movieId, favorite.userFrom)}>Remove</button></td>
-
         </tr>
     })
-
-
 
     return (
         <div style={{ width: '85%', margin: '3rem auto' }}>
@@ -87,11 +73,7 @@ function MyLikePage() {
                     </tr>
                 </thead>
                 <tbody>
-
-
                     {renderCards}
-
-
                 </tbody>
             </table>
         </div>

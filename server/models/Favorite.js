@@ -1,8 +1,6 @@
-// MongoDB Model & Schema
-// mongoose Model은 Schema를 감싸주는 역할. DB에 interface를 제공한다.
-// mongoose Schema는 document 구조, default values, validators 등을 define 한다. 
+// MongoDB Model & Schema >> interface in DB
+// mongoose Schema defines document structures, default values, validators and so on.
 
-// mongoose module을 가져온다.(라이브러리에서 가져오는거라 ./ 필요 없음)
 const mongoose = require('mongoose');
 // create Schema 
 const Schema = mongoose.Schema;

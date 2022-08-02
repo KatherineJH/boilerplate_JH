@@ -16,7 +16,6 @@ const Catogory = [
 function PostPage(props) {
     const navigate = useNavigate();
     const user = useSelector(state => state.user);
-    // const [files, setFiles] = useState([]); // filePond
     const [title, setTitle] = useState("");
     const [Description, setDescription] = useState("");
     const [Categories, setCategories] = useState("Action");
@@ -51,17 +50,13 @@ function PostPage(props) {
                 } else {
                     alert('failed to save the blog in server')
                 }
-            })
-
+            }
+        )
     }
 
     const onSubmit = (event) => {
 
         event.preventDefault(); // prevent refreshing pages
-
-        // if (user.userData && !user.userData.isAuth) {
-        //     return alert('Please Log in First')
-        // }
 
         if (title === "" || Description === "" ||
             Categories === "" || FilePath === "") {
@@ -87,8 +82,6 @@ function PostPage(props) {
                 }
             })
     }
-
-
 
     return (
         <div style={{ maxWidth: '1500px', margin: '2rem auto' }}>
@@ -136,13 +129,6 @@ function PostPage(props) {
                 />
                 <br /><br />
 
-                {/* <select onChange={handleChangeOne}>
-                    {Private.map((item, index) => (
-                        <option key={index} value={item.value}>{item.label}</option>
-                    ))}
-                </select>
-                <br /><br /> */}
-
                 <select onChange={handleChangeCategories}  style={{fontSize:'1.5rem'}}>
                     {Catogory.map((item, index) => (
                         <option key={index} value={item.label}>{item.label}</option>
@@ -152,7 +138,7 @@ function PostPage(props) {
 
                 <button type="primary" onClick={onSubmit} style={{ fontSize:'2rem', width:'30%', margin:'auto'}}>
                     Submit
-            </button>
+                </button>
 
             </form>
         </div>

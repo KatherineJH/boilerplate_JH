@@ -9,11 +9,10 @@ const bodyParser = require('body-parser');
 // Cookie: client, DB(MongoDB): server
 const cookieParser = require('cookie-parser');
 
-// 인증 처리 하는 거 들어있는 auth.js 가져오기
 const{ auth } = require('./middleware/auth')
-// 만들어 둔 User model 가져오기(models/User.js 에서)
-const{ User } = require("./models/User");
 
+// models
+const{ User } = require("./models/User");
 const { Comment  } = require("./models/Comment");
 const { Favorite } = require('./models/Favorite');
 const { Like } = require('./models/Like');
@@ -56,12 +55,12 @@ app.post('/api/users/register', (req, res) => { // '/register' -> end point: reg
 
 // login route 
 app.post('/api/users/login', (req, res) => {
-  // 1. 요청된 email 있는지 DB에서찾기 -> User.findOne()
+  // 1. find requested email in DB -> User.findOne()
   User.findOne({ email: req.body.email }, (err, user) => {
     if(!user){
       return res.json({
         loginSuccess: false,
-        message: "제공된 이메일에 해당하는 유저가 없습니다."
+        message: "No user for the requested email address!"
       })
     } else {
       // 2. Check if the requested email has the same password (in DB): check if the plain password and the encrypted(Hashed) password are the same using Bcrypt.
@@ -70,19 +69,17 @@ app.post('/api/users/login', (req, res) => {
       // console.log('err', err);
       // console.log('isMatch', isMatch);
   
-        // 메소드를 User.js 유저 모델에서 만들어야 한다.
+        // get method from User.js model
         if(!isMatch){
           return res.json({ loginSuccess : false, message: "Wrong Password!"})
         } else {
-          // 3. 비밀번호 까지 같다면 Token을 생성.(JSONWEBTOKEN 라이브러리 다운로드 필요: npm install jsonwebtoken --save)
+          // 3. password matched ->Token 
           user.generToken((err, user) => {
             if(err) return res.status(400).send(err);
-            // token을 저장한다. 어디에? 쿠키 (or 로컬 스토리지 등)
-            // cookie parser 라이브러리 설치 필요. npm install cookie-parser --save
+              // save token in Cookie or local storage
               res.cookie("auth_reg", user.token)
               .status(200)
-              .json({ loginSuccess: true, userId: user._id })
-    
+              .json({ loginSuccess: true, userId: user._id })   
           })
         }
       })
@@ -91,25 +88,20 @@ app.post('/api/users/login', (req, res) => {
   }) 
 })
 
-// middleware: end point('/api/users/auth')에서 request 받은 다음에, call back function((req, res))을 하기 전에 중간에서 해주는 것.
-app.get('/api/users/auth', auth, (req, res) => { // auth 라는 midware 추가
-  // 여기까지 미들웨어를 통과 해서 왔다면, Authentication이 true라는 뜻.
+
+app.get('/api/users/auth', auth, (req, res) => { // auth(middleware) -> before call back function((req, res) -> if pass -> Authentication true
   res.status(200).json({
     _id: req.user._id,
     isAdmin: req.user.role === 0 ? false : ture,
-    // role 0 -> 일반 user, role 0이 아니면 -> admin
-    // role 1 -> admin, role 2 -> 특정 부서 admin
     isAuth: true,
     email: req.user.email,
     name: req.user.name,
-    // lastname: req.user.lastname,
     role: req.user.role,
-    // image: req.user.image
   })
 })
 
-// logout route 만들기 
-// 로그아웃 하려는 유저를 DB(서버)에서 찾고, 그 유저의 토큰을 지워준다.
+// logout route  
+// find a user asked for log-out in BD -> remove a token of the user.
 app.get('/api/users/logout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id},
     { token: "" },
@@ -126,11 +118,11 @@ app.get('/api/users/logout', auth, (req, res) => {
 
 app.post('/api/favorite/favoriteNumber', (req, res) => {
 
-  //mongoDB에서   favorite 숫자를 가져오기 
+  //get favorite number from mongoDB 
   Favorite.find({ "movieId": req.body.movieId })
       .exec((err, info) => {
           if (err) return res.status(400).send(err)
-          // 그다음에   프론트에  다시   숫자 정보를 보내주기  
+          // send favorite number to client-side
           res.status(200).json({ success: true, favoriteNumber: info.length })
       })
 
@@ -138,17 +130,15 @@ app.post('/api/favorite/favoriteNumber', (req, res) => {
 
 app.post('/api/favorite/favorited', (req, res) => {
 
-  // 내가 이 영화를  Favorite 리스트에 넣었는지   정보를  DB 에서 가져오기 
+  // find DB if the movie is in the list
   Favorite.find({ "movieId": req.body.movieId, "userFrom": req.body.userFrom })
       .exec((err, info) => {
           if (err) return res.status(400).send(err)
-          // 그다음에   프론트에  다시   숫자 정보를 보내주기  
-
+          // send favorite number to client-side
           let result = false;
           if (info.length !== 0) {
               result = true
           }
-
           res.status(200).json({ success: true, favorited: result })
       })
 })
@@ -229,8 +219,6 @@ app.post("/api/like/getLikes", (req, res) => {
           if (err) return res.status(400).send(err);
           res.status(200).json({ success: true, likes })
       })
-
-
 })
 
 
@@ -338,7 +326,9 @@ app.post("/api/like/upDisLike", (req, res) => {
 
 })
 
+
 // < ------------- Reply Comment ----------------> //
+
 app.post("/api/comment/saveComment", auth, (req, res) => {
 
   const comment = new Comment(req.body)
@@ -366,7 +356,9 @@ app.post("/api/comment/getComments", (req, res) => {
       })
 });
 
+
 // < ------------- Board and Post ----------------> //
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/')
@@ -469,62 +461,3 @@ app.listen(port, () => {
 
 
 
-// const express = require("express");
-// const app = express();
-// const path = require("path");
-// const cors = require("cors")
-
-// // get body-parser 
-// const bodyParser = require('body-parser');
-// //  get cookie-parser 
-// const cookieParser = require('cookie-parser');
-// const config = require('./configuration/key');
-
-// const mongoose = require("mongoose");
-// const connect = mongoose.connect(config.mongoURI,
-//   {
-//     useNewUrlParser: true, useUnifiedTopology: true,
-//     useCreateIndex: true, useFindAndModify: false
-//   })
-//   .then(() => console.log('MongoDB Connected...'))
-//   .catch(err => console.log(err));
-
-// app.use(cors())
-
-// //to not get any deprecation warning or error
-// //support parsing of application/x-www-form-urlencoded post data
-// app.use(bodyParser.urlencoded({ extended: true }));
-// //to get json data
-// // support parsing of application/json type post data
-// app.use(bodyParser.json());
-// app.use(cookieParser());
-
-// app.use('/api/users', require('./routes/users'));
-// app.use('/api/favorite', require('./routes/favorite'));
-// app.use('/api/comment', require('./routes/comment'));
-// app.use('/api/like', require('./routes/like'));
-
-
-// //use this to show the image you have in node js server to client (react js)
-// //https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
-// app.use('/uploads', express.static('uploads'));
-
-// // Serve static assets if in production
-// if (process.env.NODE_ENV === "production") {
-
-//   // Set static folder
-//   app.use(express.static("client/build"));
-
-//   // index.html for all page routes
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
-//   });
-// }
-
-// // < ------------- Serverside Port ----------------> //
-
-// const port = 5001
-
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}!`)
-// })

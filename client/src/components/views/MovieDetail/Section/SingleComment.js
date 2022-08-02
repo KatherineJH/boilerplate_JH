@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Comment, Avatar, Button, Input } from 'antd';
+import { Comment, Avatar } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import LikeDislikes from './LikeDislikes';
-const { TextArea } = Input;
+
 function SingleComment(props) {
     const user = useSelector(state => state.user);
     const [CommentValue, setCommentValue] = useState("")
@@ -66,14 +66,14 @@ function SingleComment(props) {
 
             {OpenReply &&
                 <form style={{ display: 'flex' }} onSubmit={onSubmit}>
-                    <TextArea
+                    <textarea
                         style={{ width: '100%', borderRadius: '5px' }}
                         onChange={handleChange}
                         value={CommentValue}
                         placeholder="write some comments"
                     />
                     <br />
-                    <Button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</Button>
+                    <button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</button>
                 </form>
             }
 

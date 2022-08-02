@@ -63,31 +63,6 @@ function BoardPage() {
             </div>  
         </div>
     })
-  
-    // const renderCards = Blogs.map((blog, index) => {
-    //     const content = (
-    //         <div>
-    //             <a href={`/blog/${blog._id}`} >
-    //             <img style={{ width: '100%' }} src={`http://localhost:5001/${blog.filePath}`} alt='Main pic' controls></img>
-    //             </a>
-    //         </div>
-    //     );
-
-    //     return(
-    //         <div key={index}>
-    //             {content}
-    //             <div>
-    //                 <button onClick={() => onClickDelete(blog.writer, blog._id)}>
-    //                     Delete
-    //                 </button>
-    //             </div>
-    //             <span>Title: {blog.title}</span><br />
-    //             <span>Author: {blog.writer.name} </span><br />
-    //             <span>Date: {moment(blog.createdAt).format("MMM Do YY")} </span>
-    //             <br />
-    //         </div>
-    //     )
-    // })
 
   return (
     <div style={{ width: '85%', margin: '1rem auto' }}>

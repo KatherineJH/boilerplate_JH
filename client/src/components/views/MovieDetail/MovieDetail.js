@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { List, Avatar, Row, Col, Button } from 'antd';
+import { Row } from 'antd';
 import axios from 'axios';
 
 import Comments from './Section/Comments'
@@ -105,7 +105,7 @@ function MovieDetail(props) {
                 {/* Actors Grid*/}
 
                 <div style={{ display: 'flex', justifyContent: 'center', margin: '2rem' }}>
-                    <Button onClick={toggleActorView}>Toggle Actor View </Button>
+                    <button onClick={toggleActorView}>Toggle Actor View </button>
                 </div>
 
                 {ActorToggle &&
